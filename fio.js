@@ -4,14 +4,23 @@ var app = express();
 function fioHandler(fio){
 	fioSplit = fio.split(' ');
 	
-	const fioResult = fioSplit[2]+' '+fioSplit[0][0]+'. '+fioSplit[1][0]+'.';
+	const fioSplitLength = fioSplit.length;
+	
+	if(fioSplitLength < 4){
+		fioResult = fioSplit[fioSplitLength-1]+' ';
+		for (index = 0; index < fioSplitLength-1; ++index) {
+			fioResult += fioSplit[index][0]+'. ';
+		}
+	}else{
+		fioResult = 'Invalid fullname';
+	}
 	
 	return fioResult;
 }
 
 app.get('/fio', function (req, res){
-	const outputFio = fioHandler('Иван Олегович Петров');
-	res.send('Иван Олегович Петров = '+outputFio);
+	const outputFio = fioHandler(req.query['fullName']);
+	res.send(outputFio);
 });
 
 app.listen(3000, function () {
